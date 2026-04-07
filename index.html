@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyn</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#F0F4FF;color:#1a1a2e;}
+
+.hdr{background:#fff;padding:14px 18px;display:-webkit-box;display:flex;-webkit-box-align:center;align-items:center;-webkit-box-pack:justify;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.08);position:sticky;top:0;z-index:50;}
+.logo{font-size:1.5rem;font-weight:900;color:#2563EB;letter-spacing:-0.5px;}
+.logo b{color:#F59E0B;}
+
+.screen{display:none;}
+.screen.on{display:block;}
+
+.hero{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:#fff;padding:38px 20px 34px;text-align:center;}
+.hero h1{font-size:1.6rem;font-weight:800;margin-bottom:8px;line-height:1.25;}
+.hero p{font-size:.9rem;opacity:.85;margin-bottom:22px;}
+.sbar{display:-webkit-box;display:flex;background:#fff;border-radius:50px;overflow:hidden;max-width:360px;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.15);}
+.sbar input{-webkit-box-flex:1;flex:1;border:none;padding:12px 16px;font-size:1rem;outline:none;color:#1a1a2e;}
+.sbar .sb{background:#F59E0B;border:none;padding:0 16px;font-size:1.1rem;cursor:pointer;}
+
+.sec{padding:22px 16px 12px;font-size:1.05rem;font-weight:700;}
+
+.grid2{display:-webkit-box;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;gap:12px;padding:0 16px 36px;}
+.grid2>*{-webkit-box-flex:0;flex:0 0 calc(50% - 6px);width:calc(50% - 6px);}
+
+.citycard,.catcard{display:block;width:100%;min-height:44px;background:#fff;border-radius:14px;padding:16px 10px 14px;text-align:center;cursor:pointer;box-shadow:0 2px 10px rgba(37,99,235,.08);border:2px solid transparent;font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+.citycard:active,.catcard:active{border-color:#2563EB;background:#EFF6FF;}
+/* Prevent SVG/child elements from absorbing touch events on iOS */
+.citycard *,.catcard *{pointer-events:none;}
+.citycard .flag{display:block;margin:0 auto 8px;width:52px;height:34px;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.18);}
+.citycard .flag svg{width:100%;height:100%;}
+.citycard .nm{font-size:.9rem;font-weight:700;color:#1a1a2e;margin-bottom:2px;}
+.citycard .sb{font-size:.7rem;color:#64748B;}
+.catcard .ci{font-size:1.8rem;margin-bottom:8px;}
+.catcard .cn{font-size:.85rem;font-weight:700;line-height:1.3;color:#1a1a2e;}
+
+.phdr{background:#EFF6FF;padding:14px 16px 16px;border-bottom:1px solid #DBEAFE;}
+.back{display:-webkit-inline-box;display:inline-flex;-webkit-box-align:center;align-items:center;gap:5px;background:none;border:none;color:#2563EB;font-size:.88rem;font-weight:600;cursor:pointer;padding:0 0 10px;}
+.phdr h2{font-size:1.3rem;font-weight:800;}
+.phdr p{font-size:.82rem;color:#64748B;margin-top:2px;}
+
+.storegrid{display:-webkit-box;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;gap:14px;padding:16px 16px 40px;}
+.storegrid>*{-webkit-box-flex:0;flex:0 0 100%;width:100%;}
+
+.sc{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(37,99,235,.08);}
+.sc-top{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);padding:16px 14px 14px;display:-webkit-box;display:flex;-webkit-box-align:center;align-items:center;gap:12px;}
+.sc-ico{width:48px;height:48px;border-radius:12px;background:#2563EB;color:#fff;display:-webkit-box;display:flex;-webkit-box-align:center;align-items:center;-webkit-box-pack:center;justify-content:center;font-size:1.4rem;-webkit-box-flex:0;flex-shrink:0;}
+.sc-nm{font-size:.95rem;font-weight:700;}
+.tag{display:inline-block;background:#16A34A;color:#fff;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;}
+.sc-bd{padding:12px 14px 16px;}
+.inf{display:-webkit-box;display:flex;-webkit-box-align:start;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.inf .ic{font-size:.9rem;-webkit-box-flex:0;flex-shrink:0;margin-top:1px;}
+.inf span,.inf a{font-size:.83rem;color:#64748B;line-height:1.4;}
+.inf a{color:#2563EB;text-decoration:none;}
+.btns{display:-webkit-box;display:flex;gap:8px;margin-top:12px;}
+.bo{-webkit-box-flex:1;flex:1;padding:10px;border:2px solid #2563EB;background:transparent;color:#2563EB;font-size:.83rem;font-weight:600;border-radius:10px;cursor:pointer;}
+.bs{-webkit-box-flex:1;flex:1;padding:10px;background:#2563EB;color:#fff;border:none;font-size:.83rem;font-weight:600;border-radius:10px;cursor:pointer;}
+
+.nomatch{grid-column:1/-1;text-align:center;padding:40px 20px;color:#94A3B8;font-size:.9rem;}
+
+footer{background:#1E293B;color:#94A3B8;text-align:center;padding:20px;font-size:.78rem;}
+footer strong{color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">Ly<b>n</b></div>
+</div>
+
+<!-- ===== SCREEN 1: CITIES ===== -->
+<div id="s1" class="screen on">
+  <div class="hero">
+    <h1>Trouvez tout<br>pres de chez vous</h1>
+    <p>Commerces et services utiles dans votre ville en Israel.</p>
+    <div class="sbar">
+      <input id="srch" type="search" placeholder="Chercher une ville..." autocomplete="off">
+      <button class="sb" type="button">&#128269;</button>
+    </div>
+  </div>
+  <div class="sec">&#128205; Choisissez votre ville</div>
+  <div class="grid2" id="citygrid">
+    <!-- Hadera: green flag with white emblem (eucalyptus / green city) -->
+    <button type="button" class="citycard" onclick="goCity('hadera')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="#2d7d3a"/><text x="26" y="22" text-anchor="middle" font-size="14" fill="white" font-family="Arial">&#127795;</text></svg></span>
+      <div class="nm">Hadera</div><div class="sb">Cote nord</div>
+    </button>
+    <!-- Netanya: orange flag with blue emblem -->
+    <button type="button" class="citycard" onclick="goCity('netanya')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="#E87722"/><text x="26" y="22" text-anchor="middle" font-size="14" fill="#1a4fa0" font-family="Arial">&#9679;</text></svg></span>
+      <div class="nm">Netanya</div><div class="sb">Mediterranee</div>
+    </button>
+    <!-- Herzliya: blue and white horizontal stripes -->
+    <button type="button" class="citycard" onclick="goCity('herzliya')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="white"/><rect width="52" height="8" y="0" fill="#1a4fa0"/><rect width="52" height="8" y="26" fill="#1a4fa0"/><text x="26" y="22" text-anchor="middle" font-size="10" fill="#1a4fa0" font-family="Arial" font-weight="bold">H</text></svg></span>
+      <div class="nm">Herzliya</div><div class="sb">Centre</div>
+    </button>
+    <!-- Ra'anana: green flag (known as the Green City) -->
+    <button type="button" class="citycard" onclick="goCity('raanana')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="#4a9e4a"/><rect width="52" height="12" y="11" fill="#2d6e2d"/><text x="26" y="22" text-anchor="middle" font-size="13" fill="white" font-family="Arial">&#127807;</text></svg></span>
+      <div class="nm">Ra'anana</div><div class="sb">Sharon</div>
+    </button>
+    <!-- Tel Aviv: white flag with blue waves / city colors blue & white -->
+    <button type="button" class="citycard" onclick="goCity('telaviv')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="white"/><rect width="52" height="7" y="0" fill="#1a4fa0"/><rect width="52" height="7" y="27" fill="#1a4fa0"/><text x="26" y="22" text-anchor="middle" font-size="10" fill="#1a4fa0" font-family="Arial" font-weight="bold">TA</text></svg></span>
+      <div class="nm">Tel Aviv</div><div class="sb">Metropole</div>
+    </button>
+    <!-- Ashdod: blue and white with port symbol -->
+    <button type="button" class="citycard" onclick="goCity('ashdod')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="#1a4fa0"/><rect width="52" height="11" y="11.5" fill="white"/><text x="26" y="22" text-anchor="middle" font-size="12" fill="#1a4fa0" font-family="Arial">&#9875;</text></svg></span>
+      <div class="nm">Ashdod</div><div class="sb">Cote sud</div>
+    </button>
+    <!-- Jerusalem: white flag with golden city emblem (lion of Judah) -->
+    <button type="button" class="citycard" onclick="goCity('jerusalem')">
+      <span class="flag"><svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="34" fill="white"/><rect width="52" height="5" y="0" fill="#c9a227"/><rect width="52" height="5" y="29" fill="#c9a227"/><text x="26" y="23" text-anchor="middle" font-size="15" fill="#c9a227" font-family="Arial">&#129409;</text></svg></span>
+      <div class="nm">Jerusalem</div><div class="sb">Capitale</div>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: CATEGORIES ===== -->
+<div id="s2" class="screen">
+  <div class="phdr">
+    <button class="back" onclick="goScreen('s1')">&#8592; Toutes les villes</button>
+    <h2 id="cityname">Hadera</h2>
+    <p>Que cherchez-vous ?</p>
+  </div>
+  <div class="grid2" style="padding-top:18px;">
+    <button type="button" class="catcard" onclick="goCat('restos')"><div class="ci">&#127869;&#65039;</div><div class="cn">Restos / bars casher</div></button>
+    <button type="button" class="catcard" onclick="goCat('brico')"><div class="ci">&#128296;</div><div class="cn">Bricolage</div></button>
+    <button type="button" class="catcard" onclick="goCat('super')"><div class="ci">&#128722;</div><div class="cn">Supermarches</div></button>
+    <button type="button" class="catcard" onclick="goCat('meubles')"><div class="ci">&#128715;&#65039;</div><div class="cn">Meubles</div></button>
+    <button type="button" class="catcard" onclick="goCat('luminaires')"><div class="ci">&#128161;</div><div class="cn">Luminaires</div></button>
+    <button type="button" class="catcard" onclick="goCat('epices')"><div class="ci">&#127798;&#65039;</div><div class="cn">Epices</div></button>
+    <button type="button" class="catcard" onclick="goCat('electro')"><div class="ci">&#128268;</div><div class="cn">Electromenager</div></button>
+    <button type="button" class="catcard" onclick="goCat('beaute')"><div class="ci">&#128132;</div><div class="cn">Beaute / Mode</div></button>
+    <button type="button" class="catcard" onclick="goCat('deco')"><div class="ci">&#127802;</div><div class="cn">Deco / Vaisselle / Linge</div></button>
+    <button type="button" class="catcard" onclick="goCat('admin')"><div class="ci">&#127963;&#65039;</div><div class="cn">Administration</div></button>
+    <button type="button" class="catcard" onclick="goCat('medical')"><div class="ci">&#127973;</div><div class="cn">Medical</div></button>
+    <button type="button" class="catcard" onclick="goCat('sport')"><div class="ci">&#127946;</div><div class="cn">Sport</div></button>
+    <button type="button" class="catcard" onclick="goCat('animaux')"><div class="ci">&#128062;</div><div class="cn">Animaux</div></button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3: STORES ===== -->
+<div id="s3" class="screen">
+  <div class="phdr">
+    <button class="back" onclick="goScreen('s2')">&#8592; <span id="backcat">Categories</span></button>
+    <h2 id="stname"></h2>
+    <p id="stcount"></p>
+  </div>
+  <div class="storegrid" id="storegrid"></div>
+</div>
+
+<footer><strong>Lyn</strong> &middot; Votre guide local en Israel &middot; v0.5</footer>
+
+<script>
+var curCity = 'hadera';
+var curCat  = 'restos';
+
+var CITYNAMES = {
+  hadera:'Hadera', netanya:'Netanya', herzliya:'Herzliya',
+  raanana:"Ra'anana", telaviv:'Tel Aviv', ashdod:'Ashdod', jerusalem:'Jerusalem'
+};
+
+var CATNAMES = {
+  restos:'Restos / bars casher', brico:'Bricolage', super:'Supermarches',
+  meubles:'Meubles', luminaires:'Luminaires', epices:'Epices',
+  electro:'Electromenager', beaute:'Beaute / Mode', deco:'Deco / Vaisselle / Linge',
+  admin:'Administration', medical:'Medical', sport:'Sport', animaux:'Animaux'
+};
+
+var CATICONS = {
+  restos:'&#127869;&#65039;', brico:'&#128296;', super:'&#128722;',
+  meubles:'&#128715;&#65039;', luminaires:'&#128161;', epices:'&#127798;&#65039;',
+  electro:'&#128268;', beaute:'&#128132;', deco:'&#127802;',
+  admin:'&#127963;&#65039;', medical:'&#127973;', sport:'&#127946;', animaux:'&#128062;'
+};
+
+/* ---- STORE DATA ----
+   Each store: [name, tag, addrFR, phone, mapquery]
+   tag = '' means no tag shown
+*/
+var DATA = {
+  hadera: {
+    restos: [
+      ['Cafe Orient','Casher','12 rue HaNassi, Hadera','04-621-0000','Cafe Orient Hadera'],
+      ['Le Shabbat','Casher','3 rue Herzl, Hadera','04-621-1111','Le Shabbat Hadera'],
+      ['Burger Hir','Casher','Kanyon Hadera, niveau 1','04-622-2222','Hadera Mall'],
+      ['Sushido','Casher - Asiatique','45 rue Giborei Israel','04-623-3333','Sushido Hadera']
+    ],
+    brico: [
+      ['ACE Hadera','','Zone industrielle nord','04-630-0000','ACE Hadera'],
+      ['HomePlus','','8 rue HaMelakha, Hadera','04-631-0000','HomePlus Hadera'],
+      ['TechBrico','','Kanyon Hadera, rdc','04-632-0000','Hadera Mall'],
+      ['Ofer Bricolage','','22 bd Rothschild','04-633-0000','Ofer Bricolage Hadera']
+    ],
+    super: [
+      ['Rami Levy','','Zone commerciale, Hadera','04-640-0000','Rami Levy Hadera'],
+      ['Shufersal','','45 rue HaHistadrut','04-641-0000','Shufersal Hadera'],
+      ['Victory','','Centre-ville, Hadera','04-642-0000','Victory Hadera'],
+      ['Yeinot Bitan','','Kanyon Hadera','04-643-0000','Hadera Mall']
+    ],
+    meubles: [
+      ['OR Design','','Zone industrielle, Hadera','04-650-0000','OR Design Hadera'],
+      ['Kika Hadera','','Kanyon Hadera, niveau 2','04-651-0000','Hadera Mall'],
+      ['Mega Meubles','','7 rue HaTikva','04-652-0000','Mega Meubles Hadera'],
+      ['Navette IKEA','Navette dispo','Arret centre-ville, Hadera','*5548','IKEA Israel']
+    ],
+    luminaires: [
+      ['Termit Light','','Parc industriel nord','04-660-0000','Hadera'],
+      ['Or et Design','','3 rue Ben Gurion','04-661-0000','Hadera'],
+      ['LampHouse','','Kanyon Hadera, niveau 2','04-662-0000','Hadera Mall'],
+      ['Neon Pro','','Zone commerciale est','04-663-0000','Hadera']
+    ],
+    epices: [
+      ['Bazar Orient','Marche','Shuk Hadar, Hadera','04-670-0000','Hadera market'],
+      ['Spice Paradise','','Marche central, Hadera','04-671-0000','Hadera'],
+      ['HaMivchar','','14 rue HaShuk','04-672-0000','Hadera'],
+      ['Chez Mina','Fait maison','2 allee du marche','04-673-0000','Hadera']
+    ],
+    electro: [
+      ['Ivory Hadera','','Kanyon Hadera, niveau 1','04-680-0000','Hadera Mall'],
+      ['KSP','','Zone commerciale','04-681-0000','KSP Hadera'],
+      ['Bug Hadera','','Centre commercial','04-682-0000','Hadera'],
+      ['Electra Cool','','8 rue HaMelakha','04-683-0000','Hadera']
+    ],
+    beaute: [
+      ['Studio Nails','','Kanyon Hadera, niveau 1','04-690-0000','Hadera Mall'],
+      ['Coiffeur Yossi','','6 rue Rothschild','04-691-0000','Hadera'],
+      ['Fashion District','','Kanyon Hadera, niveau 2','04-692-0000','Hadera Mall'],
+      ['BeautyBar','','15 rue HaNassi','04-693-0000','Hadera']
+    ],
+    deco: [
+      ['Redi Design','','Zone commerciale nord','04-700-0000','Hadera'],
+      ['HomeSense','','Kanyon Hadera','04-701-0000','Hadera Mall'],
+      ['Textile Plus','','4 rue HaYarkon','04-702-0000','Hadera'],
+      ['Decor Orient','','Marche Hadar, Hadera','04-703-0000','Hadera']
+    ],
+    admin: [
+      ['Mairie (Iria)','Officiel','33 rue HaHistadrut, Hadera','04-630-8888','Hadera municipality'],
+      ['Arnona','Impots locaux','33 rue HaHistadrut, Hadera','04-630-8820','Hadera municipality'],
+      ['Tribunal','','Rue HaMishpat, Hadera','04-630-7777','Hadera court'],
+      ['Misrad HaPanim','Documents ID','12 rue Ben Gurion','*3450','Misrad HaPanim Hadera']
+    ],
+    medical: [
+      ['Hopital Hillel Yaffe','Urgences','Derekh HaSharon, Hadera','04-630-4304','Hillel Yaffe Hospital'],
+      ['Maccabi Hadera','Koupat Holim','8 rue Haatzmaut','*3555','Maccabi Hadera'],
+      ['Super-Pharm','','Kanyon Hadera','04-622-7000','Super-Pharm Hadera'],
+      ['Clalit Hadera','Koupat Holim','18 rue Herzl','*2700','Clalit Hadera']
+    ],
+    sport: [
+      ['Piscine municipale','Municipale','Parc Haire, Hadera','04-632-5555','Hadera pool'],
+      ["Gold's Gym",'','Zone commerciale','04-633-0000',"Gold's Gym Hadera"],
+      ['Sport-5','','Kanyon Hadera','04-620-0000','Hadera Mall'],
+      ['Go Active','','3 rue HaGiborim','04-635-0000','Hadera']
+    ],
+    animaux: [
+      ['Veterinaire Hadera','Urgences 24h','10 rue HaRofeh','04-636-0000','Hadera'],
+      ['PetShop Haire','','Kanyon Hadera','04-637-0000','Hadera Mall'],
+      ['ZooPlus Local','','4 rue Sokolov','04-638-0000','Hadera'],
+      ['Dr. Cohen Vet.','','7 rue Ben Gurion','04-639-0000','Hadera']
+    ]
+  }
+};
+
+/* Fill all other cities with placeholder data */
+var allCities = ['hadera','netanya','herzliya','raanana','telaviv','ashdod','jerusalem'];
+var allCats   = ['restos','brico','super','meubles','luminaires','epices','electro','beaute','deco','admin','medical','sport','animaux'];
+
+allCities.forEach(function(cid) {
+  if (!DATA[cid]) { DATA[cid] = {}; }
+  var cname = CITYNAMES[cid];
+  allCats.forEach(function(kid) {
+    if (!DATA[cid][kid]) {
+      DATA[cid][kid] = [
+        [CATNAMES[kid]+' - '+cname+' 1', '', '1 rue Exemple, '+cname, '0X-XXX-0001', cname],
+        [CATNAMES[kid]+' - '+cname+' 2', '', '2 rue Exemple, '+cname, '0X-XXX-0002', cname],
+        [CATNAMES[kid]+' - '+cname+' 3', '', '3 rue Exemple, '+cname, '0X-XXX-0003', cname],
+        [CATNAMES[kid]+' - '+cname+' 4', '', '4 rue Exemple, '+cname, '0X-XXX-0004', cname]
+      ];
+    }
+  });
+});
+
+/* ---- NAVIGATION ---- */
+function goScreen(id) {
+  var ids = ['s1','s2','s3'];
+  for (var i=0;i<ids.length;i++) {
+    document.getElementById(ids[i]).className = 'screen';
+  }
+  document.getElementById(id).className = 'screen on';
+  window.scrollTo(0,0);
+}
+
+function goCity(cid) {
+  curCity = cid;
+  document.getElementById('cityname').textContent = CITYNAMES[cid];
+  goScreen('s2');
+}
+
+function goCat(kid) {
+  curCat = kid;
+  document.getElementById('backcat').textContent = 'Categories';
+  document.getElementById('stname').textContent  = CATNAMES[kid];
+  var stores = DATA[curCity][kid] || [];
+  document.getElementById('stcount').textContent = stores.length + ' adresses';
+  renderStores(stores, kid);
+  goScreen('s3');
+}
+
+function renderStores(stores, kid) {
+  var icon = CATICONS[kid] || '&#127981;';
+  var html = '';
+  for (var i=0; i<stores.length; i++) {
+    var s = stores[i];
+    var name  = s[0];
+    var tag   = s[1];
+    var addr  = s[2];
+    var phone = s[3];
+    var mapq  = encodeURIComponent(s[4]);
+    var tagHTML = tag ? '<span class="tag">'+tag+'</span>' : '';
+    html += '<div class="sc">';
+    html +=   '<div class="sc-top">';
+    html +=     '<div class="sc-ico">'+icon+'</div>';
+    html +=     '<div><div class="sc-nm">'+name+'</div>'+tagHTML+'</div>';
+    html +=   '</div>';
+    html +=   '<div class="sc-bd">';
+    html +=     '<div class="inf"><span class="ic">&#128205;</span><span>'+addr+'</span></div>';
+    html +=     '<div class="inf"><span class="ic">&#128222;</span><a href="tel:'+phone+'">'+phone+'</a></div>';
+    html +=     '<div class="btns">';
+    html +=       '<button class="bo" onclick="location.href=\'tel:'+phone+'\'">Appeler</button>';
+    html +=       '<button class="bs" onclick="window.open(\'https://maps.google.com/?q='+mapq+'\',\'_blank\')">Voir sur la carte</button>';
+    html +=     '</div>';
+    html +=   '</div>';
+    html += '</div>';
+  }
+  document.getElementById('storegrid').innerHTML = html;
+}
+
+/* ---- SEARCH ---- */
+function filterCities() {
+  var q = document.getElementById('srch').value.toLowerCase().trim();
+  var cards = document.getElementById('citygrid').getElementsByClassName('citycard');
+  for (var i=0; i<cards.length; i++) {
+    var nm = cards[i].querySelector('.nm').textContent.toLowerCase();
+    cards[i].style.display = (!q || nm.indexOf(q) >= 0) ? '' : 'none';
+  }
+}
+var srch = document.getElementById('srch');
+srch.addEventListener('input',   filterCities);
+srch.addEventListener('keyup',   filterCities);
+srch.addEventListener('change',  filterCities);
+</script>
+</body>
+</html>
