@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IsraDirect — The Directory of Israel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a1f44;
+    --navy-soft:#14335f;
+    --blue:#2f6fed;
+    --blue-deep:#1d4fc4;
+    --blue-tint:#eaf1ff;
+    --bg:#ffffff;
+    --bg-tint:#f4f8ff;
+    --muted:#5c6b84;
+    --border:#e3eaf6;
+    --shadow: 0 30px 70px -35px rgba(10,31,68,0.35);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--navy);}
+  a{text-decoration:none;color:inherit;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-0.01em;margin:0;}
+  p{margin:0;}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  /* Header */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-wrap{
+    max-width:1280px;margin:0 auto;padding:20px 32px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-size:1.35rem;color:var(--navy);}
+  .logo-badge{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(145deg,var(--blue),var(--navy));
+    display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;font-family:'Inter';font-weight:700;
+  }
+  .nav-links{display:flex;align-items:center;gap:34px;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.09em;font-weight:600;color:var(--muted);}
+  .nav-links a{transition:color .15s ease;}
+  .nav-links a:hover{color:var(--navy);}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  .lang-toggle{
+    display:flex;border:1px solid var(--border);border-radius:999px;overflow:hidden;background:white;
+  }
+  .lang-toggle button{
+    border:none;background:transparent;padding:7px 15px;font-size:0.75rem;font-weight:700;letter-spacing:.03em;color:var(--muted);cursor:pointer;font-family:'Inter';
+  }
+  .lang-toggle button.active{background:var(--navy);color:white;}
+  .btn-primary{
+    background:var(--navy);color:white;padding:11px 22px;border-radius:999px;font-weight:600;font-size:0.8rem;border:none;cursor:pointer;font-family:'Inter';letter-spacing:.02em;white-space:nowrap;
+  }
+  .btn-primary:hover{background:var(--blue-deep);}
+
+  /* Hero */
+  .hero{
+    max-width:900px;margin:0 auto;padding:110px 24px 60px;text-align:center;position:relative;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-60px;right:-120px;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,var(--blue-tint) 0%, rgba(234,241,255,0) 70%);z-index:-1;
+  }
+  .hero::after{
+    content:'';position:absolute;bottom:-40px;left:-140px;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,var(--blue-tint) 0%, rgba(234,241,255,0) 70%);z-index:-1;
+  }
+  .eyebrow{
+    display:inline-block;font-family:'Inter';font-size:0.75rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:0.12em;color:var(--blue);margin-bottom:18px;
+  }
+  .hero h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.06;margin:0 0 20px;}
+  .hero h1 em{font-style:italic;color:var(--blue);}
+  .hero p.sub{color:var(--muted);font-size:1.15rem;max-width:560px;margin:0 auto 40px;line-height:1.55;font-family:'Inter';}
+
+  .search-box{
+    max-width:680px;margin:0 auto;background:var(--bg);
+    border:1px solid var(--border);border-radius:999px;
+    box-shadow:var(--shadow);
+    display:flex;align-items:center;padding:8px 8px 8px 26px;gap:10px;
+  }
+  .search-box input{
+    flex:1;border:none;outline:none;font-size:1rem;padding:14px 4px;background:transparent;color:var(--navy);font-family:'Inter';
+  }
+  .search-box button{
+    background:var(--navy);color:white;border:none;border-radius:999px;padding:14px 28px;font-weight:600;font-size:0.9rem;cursor:pointer;white-space:nowrap;font-family:'Inter';
+  }
+  .search-box button:hover{background:var(--blue-deep);}
+  .search-icon{color:var(--muted);font-size:1.05rem;}
+
+  /* Stats band */
+  .stats-band{
+    background:var(--navy);color:white;padding:50px 24px;
+  }
+  .stats-wrap{
+    max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;
+  }
+  .stat{flex:1;min-width:140px;text-align:center;}
+  .stat strong{display:block;font-family:'Fraunces';font-size:2.2rem;font-weight:500;margin-bottom:6px;}
+  .stat span{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.55);font-family:'Inter';font-weight:600;}
+
+  /* How it works */
+  .how-it-works{max-width:1180px;margin:0 auto;padding:120px 24px;}
+  .how-row{
+    display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-bottom:120px;
+  }
+  .how-row:last-child{margin-bottom:0;}
+  .how-row.reverse .how-visual{order:2;}
+  .how-row.reverse .how-text{order:1;}
+  .how-visual{
+    aspect-ratio:5/4;border-radius:32px;position:relative;overflow:hidden;
+    background:linear-gradient(150deg,var(--blue-tint) 0%, #ffffff 60%);
+    display:flex;align-items:center;justify-content:center;border:1px solid var(--border);
+  }
+  .how-visual .glyph{font-size:5rem;filter:drop-shadow(0 20px 30px rgba(47,111,237,0.25));}
+  .how-visual::after{
+    content:'';position:absolute;width:200px;height:200px;border-radius:50%;
+    border:1px solid rgba(47,111,237,0.25);top:20px;right:-40px;
+  }
+  .how-text .eyebrow{margin-bottom:14px;}
+  .how-text h3{font-size:2rem;margin-bottom:16px;line-height:1.15;}
+  .how-text p{color:var(--muted);font-size:1.02rem;line-height:1.6;font-family:'Inter';}
+
+  /* Section shared */
+  section.block{max-width:1180px;margin:0 auto;padding:20px 24px 100px;}
+  .section-title{
+    text-align:center;max-width:600px;margin:0 auto 50px;
+  }
+  .section-title h2{font-size:2.2rem;margin-bottom:14px;}
+  .section-title p{color:var(--muted);font-size:1.02rem;font-family:'Inter';}
+
+  .tinted{background:var(--bg-tint);}
+  .tinted .inner{max-width:1180px;margin:0 auto;padding:110px 24px;}
+
+  /* Categories */
+  .cat-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;
+  }
+  .cat-card{
+    position:relative;border-radius:24px;overflow:hidden;aspect-ratio:3/4;
+    cursor:pointer;border:1px solid var(--border);background:var(--bg-tint);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .cat-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);}
+  .cat-card.active{box-shadow:inset 0 0 0 3px var(--blue), var(--shadow);}
+  .cat-card img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .5s ease;
+  }
+  .cat-card:hover img{transform:scale(1.06);}
+  .cat-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(10,31,68,0) 38%, rgba(10,31,68,0.78) 100%);
+  }
+  .cat-label{position:absolute;left:20px;right:20px;bottom:18px;color:white;}
+  .cat-label .name{font-family:'Fraunces';font-weight:600;font-size:1.15rem;line-height:1.2;}
+  .cat-label .count{font-family:'Inter';font-size:0.78rem;opacity:0.8;margin-top:5px;}
+
+  /* Listings */
+  .listing-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px;
+  }
+  .biz-card{
+    background:var(--bg);border:1px solid var(--border);border-radius:24px;
+    overflow:hidden;box-shadow:0 4px 18px -12px rgba(10,31,68,0.15);
+    transition:box-shadow .18s ease, transform .18s ease;
+    display:flex;flex-direction:column;
+  }
+  .biz-card:hover{box-shadow:var(--shadow);transform:translateY(-4px);}
+  .biz-map{width:100%;height:170px;border:none;display:block;background:var(--blue-tint);}
+  .biz-body{padding:20px 22px 22px;flex:1;display:flex;flex-direction:column;gap:8px;font-family:'Inter';}
+  .biz-tag{
+    align-self:flex-start;background:var(--blue-tint);color:var(--blue-deep);
+    font-size:0.7rem;font-weight:700;padding:5px 11px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;
+  }
+  .biz-body h3{margin:4px 0 0;font-size:1.2rem;font-family:'Fraunces';font-weight:600;}
+  .biz-meta{color:var(--muted);font-size:0.87rem;display:flex;align-items:center;gap:6px;}
+  .biz-rating{color:var(--blue-deep);font-weight:700;font-size:0.87rem;}
+  .biz-desc{color:var(--muted);font-size:0.88rem;line-height:1.45;margin-top:2px;}
+  .biz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;}
+  .biz-link{color:var(--blue-deep);font-weight:700;font-size:0.84rem;}
+
+  .empty-state{text-align:center;padding:70px 20px;color:var(--muted);display:none;font-family:'Inter';}
+  .empty-state.show{display:block;}
+  .empty-state .glyph{font-size:2.2rem;margin-bottom:10px;}
+
+  /* CTA band */
+  .cta-band{background:var(--navy);color:white;padding:120px 24px;text-align:center;position:relative;overflow:hidden;}
+  .cta-band::before{
+    content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle, rgba(47,111,237,0.25) 0%, rgba(47,111,237,0) 70%);
+  }
+  .cta-inner{max-width:600px;margin:0 auto;position:relative;}
+  .cta-band h2{color:white;font-size:2.4rem;margin-bottom:16px;}
+  .cta-band p{opacity:0.75;margin-bottom:34px;font-family:'Inter';font-size:1.05rem;}
+  .cta-band button{
+    background:white;color:var(--navy);border:none;padding:15px 32px;border-radius:999px;font-weight:700;cursor:pointer;font-size:0.95rem;font-family:'Inter';
+  }
+  .cta-band button:hover{background:var(--blue-tint);}
+
+  /* Footer */
+  footer{padding:70px 24px 30px;}
+  .footer-wrap{max-width:1180px;margin:0 auto;}
+  .footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:50px;padding-bottom:50px;border-bottom:1px solid var(--border);}
+  .footer-brand .logo{margin-bottom:14px;}
+  .footer-brand p{color:var(--muted);font-family:'Inter';font-size:0.9rem;max-width:280px;line-height:1.5;}
+  .footer-cols{display:flex;gap:60px;flex-wrap:wrap;}
+  .footer-col h4{font-family:'Inter';font-size:0.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;font-weight:700;}
+  .footer-col a{display:block;font-family:'Inter';font-size:0.92rem;color:var(--navy);margin-bottom:11px;}
+  .footer-col a:hover{color:var(--blue);}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;flex-wrap:wrap;gap:14px;}
+  .footer-bottom span{color:var(--muted);font-size:0.82rem;font-family:'Inter';}
+
+  [dir="rtl"]{direction:rtl;}
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .how-row, .how-row.reverse{grid-template-columns:1fr;}
+    .how-row.reverse .how-visual{order:1;}
+    .how-row.reverse .how-text{order:2;}
+    .footer-top{flex-direction:column;gap:36px;}
+  }
+  @media (max-width:640px){
+    .hero{padding:90px 20px 50px;}
+    .search-box{flex-wrap:wrap;border-radius:22px;}
+    .search-box button{width:100%;}
+    .stats-wrap{gap:26px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="logo">
+      <div class="logo-badge">IL</div>
+      <span data-i18n="brand">IsraDirect</span>
+    </div>
+    <div class="nav-links">
+      <a href="#categories" data-i18n="navCategories">Categories</a>
+      <a href="#how" data-i18n="navHow">How it works</a>
+      <a href="#featured" data-i18n="navFeatured">Businesses</a>
+    </div>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-fr" onclick="setLang('fr')">FR</button>
+      </div>
+      <button class="btn-primary" data-i18n="addBusiness">Add your business</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero reveal">
+  <span class="eyebrow" data-i18n="eyebrowHero">The Directory of Israel</span>
+  <h1 data-i18n="heroTitle">Discover every <em>business</em> across Israel, in one place</h1>
+  <p class="sub" data-i18n="heroSub">Clothing, home goods, auto care and more — search local businesses with maps, ratings and contact details, beautifully organized.</p>
+
+  <div class="search-box">
+    <span class="search-icon">⌕</span>
+    <input id="searchInput" type="text" data-i18n-ph="searchPlaceholder" placeholder="Search businesses, categories or cities...">
+    <button onclick="applyFilters()" data-i18n="searchBtn">Search</button>
+  </div>
+</div>
+
+<div class="stats-band reveal">
+  <div class="stats-wrap">
+    <div class="stat"><strong id="statBiz">24</strong><span data-i18n="statBiz">Businesses listed</span></div>
+    <div class="stat"><strong>6</strong><span data-i18n="statCat">Categories</span></div>
+    <div class="stat"><strong>8</strong><span data-i18n="statCities">Cities covered</span></div>
+    <div class="stat"><strong>4.6</strong><span data-i18n="statRating">Average rating</span></div>
+  </div>
+</div>
+
+<div class="how-it-works" id="how">
+  <div class="how-row reveal">
+    <div class="how-visual"><span class="glyph">⌕</span></div>
+    <div class="how-text">
+      <span class="eyebrow" data-i18n="step1Eyebrow">01 — Search</span>
+      <h3 data-i18n="step1Title">Search anything, anywhere</h3>
+      <p data-i18n="step1Desc">Type in a business, a category, or a city — from Tel Aviv boutiques to Haifa garages — and get instant, relevant results.</p>
+    </div>
+  </div>
+  <div class="how-row reverse reveal">
+    <div class="how-visual"><span class="glyph">🧭</span></div>
+    <div class="how-text">
+      <span class="eyebrow" data-i18n="step2Eyebrow">02 — Discover</span>
+      <h3 data-i18n="step2Title">Compare and choose with confidence</h3>
+      <p data-i18n="step2Desc">Every listing includes ratings, categories, and a short description so you know exactly what to expect before you go.</p>
+    </div>
+  </div>
+  <div class="how-row reveal">
+    <div class="how-visual"><span class="glyph">📍</span></div>
+    <div class="how-text">
+      <span class="eyebrow" data-i18n="step3Eyebrow">03 — Arrive</span>
+      <h3 data-i18n="step3Title">Get there with a live map</h3>
+      <p data-i18n="step3Desc">Each business page includes an embedded map, so directions are always one tap away.</p>
+    </div>
+  </div>
+</div>
+
+<div class="tinted" id="categories">
+  <div class="inner reveal">
+    <div class="section-title">
+      <h2 data-i18n="browseCat">Browse by category</h2>
+      <p data-i18n="browseCatSub">Tap a category to filter listings below</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</div>
+
+<section class="block" id="featured">
+  <div class="section-title reveal">
+    <h2 data-i18n="featured">Featured businesses</h2>
+    <p id="resultsCount"></p>
+  </div>
+  <div class="listing-grid reveal" id="bizGrid"></div>
+  <div class="empty-state" id="emptyState">
+    <div class="glyph">🕵️</div>
+    <p data-i18n="noResults">No businesses match your search. Try another keyword or category.</p>
+  </div>
+</section>
+
+<div class="cta-band reveal">
+  <div class="cta-inner">
+    <h2 data-i18n="ctaTitle">Own a business in Israel?</h2>
+    <p data-i18n="ctaSub">Get listed for free and reach thousands of local customers searching every day.</p>
+    <button data-i18n="ctaBtn">List your business — it's free</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-badge">IL</div><span data-i18n="brand">IsraDirect</span></div>
+        <p data-i18n="footerTagline">The directory of businesses across Israel — search, compare, and get there.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4 data-i18n="footerColExplore">Explore</h4>
+          <a href="#categories" data-i18n="navCategories">Categories</a>
+          <a href="#how" data-i18n="navHow">How it works</a>
+          <a href="#featured" data-i18n="navFeatured">Businesses</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footerColBusiness">For Business</h4>
+          <a href="#" data-i18n="addBusiness">Add your business</a>
+          <a href="#" data-i18n="footerPricing">Pricing</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer">© 2026 IsraDirect. The directory of businesses across Israel.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const categories = [
+  { id: 'clothing', emoji: '👕', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&auto=format&fit=crop', en: 'Clothing', fr: 'Vêtements' },
+  { id: 'home', emoji: '🏠', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80&auto=format&fit=crop', en: 'Home', fr: 'Maison' },
+  { id: 'auto', emoji: '🚗', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&q=80&auto=format&fit=crop', en: 'Auto Needs', fr: 'Automobile' },
+  { id: 'food', emoji: '🍽️', img: 'https://images.unsplash.com/photo-1574966739987-65e38db0f7ce?w=600&q=80&auto=format&fit=crop', en: 'Food & Dining', fr: 'Restauration' },
+  { id: 'beauty', emoji: '💇', img: 'https://images.unsplash.com/photo-1595871151608-bc7abd1caca3?w=600&q=80&auto=format&fit=crop', en: 'Beauty & Wellness', fr: 'Beauté & Bien-être' },
+  { id: 'tech', emoji: '💻', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80&auto=format&fit=crop', en: 'Electronics', fr: 'Électronique' },
+];
+
+const businesses = [
+  { cat:'clothing', name:'Levinsky Threads', city:'Tel Aviv', rating:4.8, en:'Trendy streetwear and locally designed apparel in the heart of Tel Aviv.', fr:'Vêtements streetwear tendance et créations locales, au cœur de Tel Aviv.' },
+  { cat:'clothing', name:'Yaffo Boutique', city:'Jaffa', rating:4.6, en:'Boutique fashion with handmade linen pieces near the old port.', fr:'Boutique de mode avec pièces en lin fait main près du vieux port.' },
+  { cat:'clothing', name:'Herzliya Kids Wear', city:'Herzliya', rating:4.7, en:'Quality children\'s clothing and shoes, all sizes in stock.', fr:'Vêtements et chaussures pour enfants de qualité, toutes tailles en stock.' },
+  { cat:'clothing', name:'Sarona Denim Co.', city:'Tel Aviv', rating:4.5, en:'Premium denim and casualwear, tailored fits available.', fr:'Denim premium et vêtements décontractés, retouches sur mesure disponibles.' },
+
+  { cat:'home', name:'Carmel Home Goods', city:'Haifa', rating:4.9, en:'Furniture, textiles and décor for modern Israeli homes.', fr:'Meubles, textiles et décoration pour les foyers israéliens modernes.' },
+  { cat:'home', name:'Ramat Gan Interiors', city:'Ramat Gan', rating:4.4, en:'Custom kitchens, closets and interior design consultations.', fr:'Cuisines sur mesure, dressings et conseils en design d\'intérieur.' },
+  { cat:'home', name:'Netanya Garden Supply', city:'Netanya', rating:4.6, en:'Everything for balconies and gardens, from soil to solar lights.', fr:'Tout pour balcons et jardins, de la terre aux lampes solaires.' },
+
+  { cat:'auto', name:'Ayalon Auto Care', city:'Tel Aviv', rating:4.5, en:'Full service garage: oil changes, tires, and diagnostics.', fr:'Garage complet : vidanges, pneus et diagnostics.' },
+  { cat:'auto', name:'Jerusalem Motors', city:'Jerusalem', rating:4.3, en:'Trusted mechanic for European and Japanese vehicles since 1998.', fr:'Mécanicien de confiance pour véhicules européens et japonais depuis 1998.' },
+  { cat:'auto', name:'Beer Sheva Tire Center', city:'Beer Sheva', rating:4.7, en:'Same-day tire replacement and wheel alignment.', fr:'Remplacement de pneus le jour même et parallélisme des roues.' },
+  { cat:'auto', name:'Haifa Auto Detailing', city:'Haifa', rating:4.8, en:'Premium car detailing, ceramic coating and interior cleaning.', fr:'Detailing automobile premium, revêtement céramique et nettoyage intérieur.' },
+
+  { cat:'food', name:'Sarona Market Bites', city:'Tel Aviv', rating:4.9, en:'Fresh Mediterranean food court with local specialties.', fr:'Food court méditerranéen frais avec spécialités locales.' },
+  { cat:'food', name:'Mahane Yehuda Grill', city:'Jerusalem', rating:4.7, en:'Classic Israeli grill in the famous shuk.', fr:'Grill israélien classique dans le célèbre marché shuk.' },
+  { cat:'food', name:'Jaffa Port Café', city:'Jaffa', rating:4.6, en:'Seaside café with brunch, coffee and fresh juices.', fr:'Café en bord de mer avec brunch, café et jus frais.' },
+  { cat:'food', name:'Haifa Bay Bakery', city:'Haifa', rating:4.5, en:'Artisan bread and pastries baked fresh every morning.', fr:'Pain artisanal et pâtisseries fraîches tous les matins.' },
+
+  { cat:'beauty', name:'Rothschild Spa & Wellness', city:'Tel Aviv', rating:4.8, en:'Massage, facials and wellness treatments in a calm setting.', fr:'Massages, soins du visage et bien-être dans un cadre apaisant.' },
+  { cat:'beauty', name:'Herzliya Hair Studio', city:'Herzliya', rating:4.6, en:'Modern cuts, coloring and styling for all hair types.', fr:'Coupes modernes, coloration et coiffage pour tous types de cheveux.' },
+  { cat:'beauty', name:'Ramat Aviv Nails', city:'Tel Aviv', rating:4.4, en:'Manicure, pedicure and nail art by appointment.', fr:'Manucure, pédicure et nail art sur rendez-vous.' },
+
+  { cat:'tech', name:'Dizengoff Electronics', city:'Tel Aviv', rating:4.5, en:'Phones, laptops and repairs with same-day service.', fr:'Téléphones, ordinateurs portables et réparations le jour même.' },
+  { cat:'tech', name:'Haifa Tech Repair', city:'Haifa', rating:4.3, en:'Screen replacement, battery service and data recovery.', fr:'Remplacement d\'écran, batterie et récupération de données.' },
+  { cat:'tech', name:'Jerusalem Gadget Hub', city:'Jerusalem', rating:4.6, en:'Smart home devices, accessories and expert advice.', fr:'Objets connectés, accessoires et conseils d\'experts.' },
+];
+
+let lang = 'en';
+let activeCat = null;
+
+const i18n = {
+  en: {
+    brand: 'IsraDirect',
+    addBusiness: 'Add your business',
+    navCategories: 'Categories',
+    navHow: 'How it works',
+    navFeatured: 'Businesses',
+    eyebrowHero: 'The Directory of Israel',
+    heroTitle: 'Discover every <em>business</em> across Israel, in one place',
+    heroSub: 'Clothing, home goods, auto care and more — search local businesses with maps, ratings and contact details, beautifully organized.',
+    searchPlaceholder: 'Search businesses, categories or cities...',
+    searchBtn: 'Search',
+    statBiz: 'Businesses listed',
+    statCat: 'Categories',
+    statCities: 'Cities covered',
+    statRating: 'Average rating',
+    step1Eyebrow: '01 — Search',
+    step1Title: 'Search anything, anywhere',
+    step1Desc: 'Type in a business, a category, or a city — from Tel Aviv boutiques to Haifa garages — and get instant, relevant results.',
+    step2Eyebrow: '02 — Discover',
+    step2Title: 'Compare and choose with confidence',
+    step2Desc: 'Every listing includes ratings, categories, and a short description so you know exactly what to expect before you go.',
+    step3Eyebrow: '03 — Arrive',
+    step3Title: 'Get there with a live map',
+    step3Desc: 'Each business page includes an embedded map, so directions are always one tap away.',
+    browseCat: 'Browse by category',
+    browseCatSub: 'Tap a category to filter listings below',
+    featured: 'Featured businesses',
+    noResults: 'No businesses match your search. Try another keyword or category.',
+    ctaTitle: 'Own a business in Israel?',
+    ctaSub: "Get listed for free and reach thousands of local customers searching every day.",
+    ctaBtn: "List your business — it's free",
+    footerTagline: 'The directory of businesses across Israel — search, compare, and get there.',
+    footerColExplore: 'Explore',
+    footerColBusiness: 'For Business',
+    footerPricing: 'Pricing',
+    footer: '© 2026 IsraDirect. The directory of businesses across Israel.',
+    resultsCount: (n) => `${n} result${n===1?'':'s'}`,
+    viewMap: 'View on map ↗',
+  },
+  fr: {
+    brand: 'IsraDirect',
+    addBusiness: 'Ajoutez votre entreprise',
+    navCategories: 'Catégories',
+    navHow: 'Comment ça marche',
+    navFeatured: 'Entreprises',
+    eyebrowHero: "L'annuaire d'Israël",
+    heroTitle: 'Découvrez chaque <em>entreprise</em> en Israël, au même endroit',
+    heroSub: "Vêtements, maison, automobile et plus — recherchez des entreprises locales avec cartes, avis et coordonnées, joliment organisées.",
+    searchPlaceholder: 'Recherchez une entreprise, une catégorie ou une ville...',
+    searchBtn: 'Rechercher',
+    statBiz: 'Entreprises référencées',
+    statCat: 'Catégories',
+    statCities: 'Villes couvertes',
+    statRating: 'Note moyenne',
+    step1Eyebrow: '01 — Rechercher',
+    step1Title: 'Recherchez n\'importe quoi, n\'importe où',
+    step1Desc: 'Saisissez une entreprise, une catégorie ou une ville — des boutiques de Tel Aviv aux garages de Haïfa — et obtenez des résultats instantanés.',
+    step2Eyebrow: '02 — Découvrir',
+    step2Title: 'Comparez et choisissez en toute confiance',
+    step2Desc: 'Chaque fiche comprend des avis, une catégorie et une courte description pour savoir exactement à quoi vous attendre.',
+    step3Eyebrow: '03 — Arriver',
+    step3Title: 'Arrivez grâce à une carte en direct',
+    step3Desc: 'Chaque fiche entreprise inclut une carte intégrée, pour un itinéraire toujours à portée de main.',
+    browseCat: 'Parcourir par catégorie',
+    browseCatSub: 'Cliquez sur une catégorie pour filtrer les résultats',
+    featured: 'Entreprises en vedette',
+    noResults: "Aucune entreprise ne correspond à votre recherche. Essayez un autre mot-clé ou une autre catégorie.",
+    ctaTitle: 'Vous avez une entreprise en Israël ?',
+    ctaSub: "Inscrivez-vous gratuitement et touchez des milliers de clients locaux chaque jour.",
+    ctaBtn: "Référencez votre entreprise — c'est gratuit",
+    footerTagline: "L'annuaire des entreprises en Israël — recherchez, comparez, et rendez-vous sur place.",
+    footerColExplore: 'Explorer',
+    footerColBusiness: 'Espace Pro',
+    footerPricing: 'Tarifs',
+    footer: '© 2026 IsraDirect. L\'annuaire des entreprises en Israël.',
+    resultsCount: (n) => `${n} résultat${n===1?'':'s'}`,
+    viewMap: 'Voir sur la carte ↗',
+  }
+};
+
+function mapEmbedUrl(name, city){
+  const q = encodeURIComponent(`${name}, ${city}, Israel`);
+  return `https://www.google.com/maps?q=${q}&output=embed`;
+}
+
+function renderCategories(){
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  categories.forEach(c => {
+    const count = businesses.filter(b => b.cat === c.id).length;
+    const div = document.createElement('div');
+    div.className = 'cat-card' + (activeCat === c.id ? ' active' : '');
+    div.onclick = () => { activeCat = (activeCat === c.id) ? null : c.id; applyFilters(); };
+    div.innerHTML = `
+      <img src="${c.img}" alt="${c[lang]}" loading="lazy">
+      <div class="cat-overlay"></div>
+      <div class="cat-label">
+        <div class="name">${c[lang]}</div>
+        <div class="count">${count} ${lang==='en' ? 'listed' : 'inscrits'}</div>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function renderBusinesses(list){
+  const grid = document.getElementById('bizGrid');
+  const empty = document.getElementById('emptyState');
+  grid.innerHTML = '';
+  document.getElementById('resultsCount').textContent = i18n[lang].resultsCount(list.length);
+
+  if(list.length === 0){
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+
+  list.forEach(b => {
+    const catInfo = categories.find(c => c.id === b.cat);
+    const card = document.createElement('div');
+    card.className = 'biz-card';
+    card.innerHTML = `
+      <iframe class="biz-map" loading="lazy" src="${mapEmbedUrl(b.name, b.city)}"></iframe>
+      <div class="biz-body">
+        <span class="biz-tag">${catInfo.emoji} ${catInfo[lang]}</span>
+        <h3>${b.name}</h3>
+        <div class="biz-meta">📍 ${b.city}, Israel</div>
+        <div class="biz-rating">★ ${b.rating.toFixed(1)}</div>
+        <div class="biz-desc">${b[lang]}</div>
+        <div class="biz-footer">
+          <a class="biz-link" href="${mapEmbedUrl(b.name, b.city).replace('&output=embed','')}" target="_blank" rel="noopener">${i18n[lang].viewMap}</a>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function applyFilters(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = businesses;
+  if(activeCat){
+    list = list.filter(b => b.cat === activeCat);
+  }
+  if(q){
+    list = list.filter(b => {
+      const catInfo = categories.find(c => c.id === b.cat);
+      return b.name.toLowerCase().includes(q)
+        || b.city.toLowerCase().includes(q)
+        || catInfo.en.toLowerCase().includes(q)
+        || catInfo.fr.toLowerCase().includes(q)
+        || b[lang].toLowerCase().includes(q);
+    });
+  }
+  renderCategories();
+  renderBusinesses(list);
+}
+
+function setLang(l){
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.getElementById('btn-fr').classList.toggle('active', l==='fr');
+  document.documentElement.setAttribute('lang', l);
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(i18n[l][key]) el.innerHTML = i18n[l][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if(i18n[l][key]) el.setAttribute('placeholder', i18n[l][key]);
+  });
+
+  applyFilters();
+}
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// init
+document.getElementById('statBiz').textContent = businesses.length;
+setLang('en');
+</script>
+
+</body>
+</html>
